@@ -1,0 +1,24 @@
+{
+  "name": "bicocquiz",
+  "version": "1.0.0",
+  "description": "Test game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dogeMcdogeface/Bicocquiz.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dogeMcdogeface/Bicocquiz/issues"
+  },
+  "homepage": "https://github.com/dogeMcdogeface/Bicocquiz#readme"
+}

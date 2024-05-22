@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room</title>
+</head>
+<body>
+    <h1 id="roomName">Room: </h1>
+    <h2 id="roomLeader">Leader: </h2>
+    <h3 id="roomTheme">Theme: </h3>
+    <h2>Connected Users:</h2>
+    <ul id="userList"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const room = localStorage.getItem('room');
+        const username = localStorage.getItem('username');
+
+        socket.emit('joinRoom', { room, username });
+
+        // Listen for room info
+        socket.on('roomInfo', (data) => {
+            document.getElementById('roomName').textContent = `Room: ${data.room}`;
+            document.getElementById('roomLeader').textContent = `Leader: ${data.leader}`;
+            document.getElementById('roomTheme').textContent = `Theme: ${data.theme}`;
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            data.players.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = user;
+                userList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

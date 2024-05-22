@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Room</title>
+</head>
+<body>
+    <h1>Enter Room Code and Username</h1>
+    <form id="roomForm">
+        <input type="text" id="roomCode" maxlength="4" placeholder="Room Code" required>
+        <input type="text" id="username" placeholder="Username" required>
+        <button type="submit">Join Room</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        document.getElementById('roomForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const roomCode = document.getElementById('roomCode').value;
+            const username = document.getElementById('username').value;
+            socket.emit('joinRoom', { room: roomCode, username: username });
+            localStorage.setItem('room', roomCode);
+            localStorage.setItem('username', username);
+            window.location.href = 'room.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <h2>Connected Users</h2>
+    <table id="connectedUsersTable">
+        <thead>
+            <tr>
+                <th>Socket ID</th>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Rooms</h2>
+    <table id="roomsTable">
+        <thead>
+            <tr>
+                <th>Room Name</th>
+                <th>Leader</th>
+                <th>Theme</th>
+                <th>Questions</th>
+                <th>Players</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        function updateConnectedUsersTable(connectedUsers) {
+            const tableBody = document.querySelector('#connectedUsersTable tbody');
+            tableBody.innerHTML = '';
+            for (const [socketId, username] of Object.entries(connectedUsers)) {
+                const row = document.createElement('tr');
+                const socketIdCell = document.createElement('td');
+                const usernameCell = document.createElement('td');
+                socketIdCell.textContent = socketId;
+                usernameCell.textContent = username || 'Not joined a room';
+                row.appendChild(socketIdCell);
+                row.appendChild(usernameCell);
+                tableBody.appendChild(row);
+            }
+        }
+
+        function updateRoomsTable(rooms) {
+            const tableBody = document.querySelector('#roomsTable tbody');
+            tableBody.innerHTML = '';
+            for (const [roomName, roomInfo] of Object.entries(rooms)) {
+                const row = document.createElement('tr');
+                const roomNameCell = document.createElement('td');
+                const leaderCell = document.createElement('td');
+                const themeCell = document.createElement('td');
+                const questionsCell = document.createElement('td');
+                const playersCell = document.createElement('td');
+
+                roomNameCell.textContent = roomName;
+                leaderCell.textContent = roomInfo.leader;
+                themeCell.textContent = roomInfo.theme;
+                questionsCell.textContent = roomInfo.questions.join(', ');
+                playersCell.textContent = roomInfo.players.join(', ');
+
+                row.appendChild(roomNameCell);
+                row.appendChild(leaderCell);
+                row.appendChild(themeCell);
+                row.appendChild(questionsCell);
+                row.appendChild(playersCell);
+                tableBody.appendChild(row);
+            }
+        }
+
+        socket.on('updateAdmin', ({ rooms, connectedUsers }) => {
+            updateConnectedUsersTable(connectedUsers);
+            updateRoomsTable(rooms);
+        });
+    </script>
+</body>
+</html>
